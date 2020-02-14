@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter_exchange/models/models.dart';
@@ -14,7 +13,6 @@ class ExchangeAPIClient {
   }) : assert(httpClient != null);
 
   Future<List<Rate>> getRatesFor(String baseCurrency) async {
-
     final ratesURL = '$baseURL/latest?base=$baseCurrency';
     final ratesResponse = await this.httpClient.get(ratesURL);
     if (ratesResponse.statusCode != 200) {
@@ -22,14 +20,15 @@ class ExchangeAPIClient {
     }
 
     final ratesJson = jsonDecode(ratesResponse.body) as Map;
-    final ratesArray = ratesJson["rates"] as List;
+    final ratesMap = ratesJson["rates"] as Map;
     var modelArray = List<Rate>();
 
-    ratesArray.forEach( (item) {
-      modelArray.add(Rate.fromJson(item));
-    });
-
+    for (var key in ratesMap.keys) {
+      modelArray.add(Rate(
+        currency: key,
+        value: ratesMap[key],
+      ));
+    }
     return modelArray;
   }
-
 }
