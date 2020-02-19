@@ -14,7 +14,8 @@ class RatesLoading extends RatesState {}
 class RatesLoaded extends RatesState {
   final List<Rate> rates;
 
-  const RatesLoaded({@required this.rates}) : assert(rates != null);
+  const RatesLoaded({@required this.rates})
+      : assert(rates != null);
 
   @override
   List<Object> get props => [rates];

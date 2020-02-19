@@ -6,8 +6,9 @@ abstract class RatesEvent extends Equatable {
 
 class FetchRates extends RatesEvent {
   final String currency;
+  final int interval;
 
-  const FetchRates({@required this.currency}) : assert(currency != null);
+  const FetchRates({@required this.currency, @required this.interval}) : assert(currency != null);
 
   @override
   List<Object> get props => [currency];
@@ -15,9 +16,15 @@ class FetchRates extends RatesEvent {
 
 class RefreshRates extends RatesEvent {
   final String currency;
+  final int interval;
 
-  const RefreshRates({@required this.currency}) : assert(currency != null);
+  const RefreshRates({@required this.currency, this.interval}) : assert(currency != null);
 
   @override
   List<Object> get props => [currency];
+
+  @override
+  String toString() {
+  return 'Refresh rates for $interval';
+   }
 }

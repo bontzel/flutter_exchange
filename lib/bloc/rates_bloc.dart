@@ -3,26 +3,43 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_exchange/bloc/bloc.dart';
 import 'package:flutter_exchange/models/models.dart';
 import 'package:flutter_exchange/repositories/exchange_repository.dart';
+import 'package:rxdart/streams.dart';
 
 part 'rates_event.dart';
 part 'rates_state.dart';
 
 class RatesBloc extends Bloc<RatesEvent, RatesState> {
   final ExchangeRepository repo;
-  final int interval;
-  final String currency;
-  StreamSubscription sub;
-  // Stream.periodic(Duration(seconds: 1), (x) => ticks - x - 1)
+  final IntervalSettingBloc intervalBloc;
+  final CurrencySettingBloc currencyBloc;
+  
+  StreamSubscription refreshSub;
+  StreamSubscription dependencySub;
 
   RatesBloc({
     @required this.repo,
-    @required this.interval,
-    @required this.currency,
+    @required this.intervalBloc,
+    @required this.currencyBloc,
   })  : assert(repo != null),
-        assert(interval != null),
-        assert(currency != null);
+        assert(intervalBloc != null),
+        assert(currencyBloc != null) {
+
+          dependencySub = CombineLatestStream.list([
+            intervalBloc.asBroadcastStream(),
+            currencyBloc.asBroadcastStream()
+          ]).listen((dataList) {
+
+            final intervalState = dataList.first;
+            final currencyState = dataList[1];
+
+            if (intervalState is IntervalSelected && currencyState is CurrencySelected) {
+              add(FetchRates(currency: currencyState.currency, interval: intervalState.interval));
+            }
+          });
+        }
 
   @override
   RatesState get initialState => RatesEmpty();
@@ -33,12 +50,12 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
   ) async* {
     if (event is FetchRates) {
       yield RatesLoading();
-      sub?.cancel();
+      refreshSub?.cancel();
       try {
         final List<Rate> rates = await repo.getRatesFor(event.currency);
         yield RatesLoaded(rates: rates);
-        sub = Stream.periodic(Duration(seconds: interval), (x) => x).listen(
-          (duration) => add(RefreshRates(currency: currency)),
+        refreshSub = Stream.periodic(Duration(seconds: event.interval), (x) => x).listen(
+          (duration) => add(RefreshRates(currency: event.currency, interval: event.interval)),
         );
       } catch (_) {
         yield RatesError();
@@ -57,7 +74,8 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
 
   @override
   Future<void> close() {
-    sub.cancel();
+    refreshSub.cancel();
+    dependencySub.cancel();
     return super.close();
   }
 }
