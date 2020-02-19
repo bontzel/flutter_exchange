@@ -35,10 +35,11 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
             final intervalState = dataList.first;
             final currencyState = dataList[1];
 
-            if (intervalState is IntervalSelected && currencyState is CurrencySelected) {
+            if (intervalState is IntervalSettingState && currencyState is CurrencySettingState) {
               add(FetchRates(currency: currencyState.currency, interval: intervalState.interval));
             }
           });
+
         }
 
   @override
