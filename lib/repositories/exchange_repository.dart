@@ -10,4 +10,8 @@ class ExchangeRepository {
   Future<List<Rate>> getRatesFor(String currency) async {
     return await client.getRatesFor(currency);
   }
+
+  List<String> getAllCurrencies() {
+    return client.currencies;
+  }
 }

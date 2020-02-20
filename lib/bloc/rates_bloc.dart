@@ -73,6 +73,10 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
     }
   }
 
+  List<String> getAllCurrencies() {
+    return repo.getAllCurrencies();
+  }
+
   @override
   Future<void> close() {
     refreshSub.cancel();

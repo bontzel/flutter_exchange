@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 class ExchangeAPIClient {
   static const baseURL = 'https://api.exchangeratesapi.io';
   final http.Client httpClient;
+  List<String> currencies = List<String>();
 
   ExchangeAPIClient({
     @required this.httpClient,
@@ -23,7 +24,9 @@ class ExchangeAPIClient {
     final ratesMap = ratesJson["rates"] as Map;
     var modelArray = List<Rate>();
 
+    currencies = List<String>();
     for (var key in ratesMap.keys) {
+      currencies.add(key);
       modelArray.add(Rate(
         currency: key,
         value: ratesMap[key],
