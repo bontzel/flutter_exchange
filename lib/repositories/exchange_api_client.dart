@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_exchange/models/models.dart';
 import 'package:http/http.dart' as http;
@@ -32,6 +33,8 @@ class ExchangeAPIClient {
         value: ratesMap[key],
       ));
     }
+    modelArray.add(Rate(currency: "XXX", value: Random().nextDouble()));
+    currencies.add("EUR");
     return modelArray;
   }
 }

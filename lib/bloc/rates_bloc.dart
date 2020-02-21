@@ -56,7 +56,7 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
         final List<Rate> rates = await repo.getRatesFor(event.currency);
         yield RatesLoaded(rates: rates);
         refreshSub = Stream.periodic(Duration(seconds: event.interval), (x) => x).listen(
-          (duration) => add(RefreshRates(currency: event.currency, interval: event.interval)),
+          (duration) => add(RefreshRates(currency: event.currency, interval: event.interval, timestamp: DateTime.now())),
         );
       } catch (_) {
         yield RatesError();

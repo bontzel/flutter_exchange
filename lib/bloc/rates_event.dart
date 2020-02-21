@@ -17,14 +17,15 @@ class FetchRates extends RatesEvent {
 class RefreshRates extends RatesEvent {
   final String currency;
   final int interval;
+  final DateTime timestamp;
 
-  const RefreshRates({@required this.currency, this.interval}) : assert(currency != null);
+  const RefreshRates({@required this.currency, this.interval, @required this.timestamp}) : assert(currency != null);
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency, timestamp];
 
   @override
   String toString() {
-  return 'Refresh rates for $interval';
+  return 'Refresh rates for $interval at $timestamp';
    }
 }

@@ -10,7 +10,7 @@ class Rate extends Equatable {
   });
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency, value];
 
   static Rate fromJson(Map json) {
     var rate;

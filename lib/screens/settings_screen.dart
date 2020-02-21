@@ -12,17 +12,16 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(
+          Padding(
+            padding: EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[IntervalSelector()],
             ),
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[Text('Select base currency:')],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text('Select base currency:')],
           ),
           Expanded(
             child: CurrencySelector(),

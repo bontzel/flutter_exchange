@@ -2,14 +2,17 @@ part of 'rates_bloc.dart';
 
 abstract class RatesState extends Equatable {
   const RatesState();
+}
 
-  @override
+class RatesEmpty extends RatesState {
+   @override
   List<Object> get props => [];
 }
 
-class RatesEmpty extends RatesState {}
-
-class RatesLoading extends RatesState {}
+class RatesLoading extends RatesState {
+   @override
+  List<Object> get props => [];
+}
 
 class RatesLoaded extends RatesState {
   final List<Rate> rates;
@@ -21,4 +24,7 @@ class RatesLoaded extends RatesState {
   List<Object> get props => [rates];
 }
 
-class RatesError extends RatesState {}
+class RatesError extends RatesState {
+   @override
+  List<Object> get props => [];
+}

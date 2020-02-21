@@ -27,9 +27,32 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           BlocBuilder<CurrencySettingBloc, CurrencySettingState>(
             builder: (context, state) {
-              return Row(
-                children: <Widget>[Text(state.currency)],
+              return Padding(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      state.currency,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ],
+                ),
               );
+            },
+          ),
+          BlocBuilder<RatesBloc, RatesState>(
+            builder: (context, state) {
+              if (state is RatesLoaded) {
+                final date = DateTime.now();
+
+                return Text('Updated at: $date');
+              } else {
+                return Text('Updated never.');
+              }
             },
           ),
           Expanded(
