@@ -14,4 +14,34 @@ class ExchangeRepository {
   List<String> getAllCurrencies() {
     return client.currencies;
   }
+
+  Future<Map<String, RateSeries>> getEvoAgainstEURBGNRONFor(String baseCurrency) async {
+
+    Map json = await client.getLast5DaysFor(baseCurrency);
+
+    Map<String, RateSeries> model = Map<String, RateSeries>();
+
+    final rates = json["rates"] as Map;
+
+    for (String day in rates.keys) {
+      DateTime date = DateTime.parse(day);
+
+      for (String currency in rates[day].keys) {
+        final ratesForDate = rates[day] as Map;
+        switch (currency) {
+          case "RON":
+          case "BGN":
+          case "EUR":
+            model[currency] =
+                RateSeries(day: date, value: ratesForDate[currency]);
+            break;
+          default:
+        }
+      }
+    }
+
+    return model;
+  }
+
+
 }

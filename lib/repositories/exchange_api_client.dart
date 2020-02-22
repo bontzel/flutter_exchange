@@ -37,4 +37,31 @@ class ExchangeAPIClient {
     currencies.add("EUR");
     return modelArray;
   }
+
+  Future<Map> getLast5DaysFor(String baseCurrency) async {
+    final today = DateTime.now();
+    final endDate = today.year.toString() +
+        "-" +
+        today.month.toString() +
+        "-" +
+        today.year.toString();
+    final fiveDaysAgo = today.subtract(Duration(days: 5));
+    final startDate = fiveDaysAgo.year.toString() +
+        "-" +
+        fiveDaysAgo.month.toString() +
+        "-" +
+        fiveDaysAgo.year.toString();
+
+    final historyQuoteURL =
+        "$baseURL/history?start_at=$startDate&end_at=$endDate&base=$baseCurrency";
+    final response = await this.httpClient.get(historyQuoteURL);
+
+    if (response.statusCode != 200) {
+      throw Exception('error getting history for $baseCurrency');
+    }
+
+    final json = jsonDecode(response.body) as Map;
+
+    return json;
+  }
 }

@@ -47,6 +47,9 @@ class ExchangeApp extends StatelessWidget {
       routes: {
         Routes.settings: (context) {
           return SettingsScreen();
+        },
+        Routes.charts: (context) {
+          return SettingsScreen();
         }
       },
     );
