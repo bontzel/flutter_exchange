@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-class RateSeries extends Equatable {
+class RateSeries extends Equatable implements Comparable {
   final DateTime day;
   final double value;
 
@@ -20,5 +20,10 @@ class RateSeries extends Equatable {
     }
 
     return seriesList;
+  }
+
+  @override
+  int compareTo(other) {
+    return day.compareTo(other.day);
   }
 }

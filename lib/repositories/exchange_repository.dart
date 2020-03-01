@@ -15,11 +15,11 @@ class ExchangeRepository {
     return client.currencies;
   }
 
-  Future<Map<String, RateSeries>> getEvoAgainstEURBGNRONFor(String baseCurrency) async {
+  Future<Map<String, List<RateSeries>>> getEvoAgainstEURBGNRONFor(String baseCurrency) async {
 
     Map json = await client.getLast5DaysFor(baseCurrency);
 
-    Map<String, RateSeries> model = Map<String, RateSeries>();
+    Map<String, List<RateSeries>> model = Map<String,  List<RateSeries>>();
 
     final rates = json["rates"] as Map;
 
@@ -32,8 +32,11 @@ class ExchangeRepository {
           case "RON":
           case "BGN":
           case "EUR":
-            model[currency] =
-                RateSeries(day: date, value: ratesForDate[currency]);
+            if (model[currency] == null) {
+              model[currency] = List<RateSeries>();
+            }
+            model[currency].add(RateSeries(day: date, value: ratesForDate[currency]));
+                
             break;
           default:
         }

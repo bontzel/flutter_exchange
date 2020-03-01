@@ -21,6 +21,15 @@ class HomeScreen extends StatelessWidget {
               Navigator.pushNamed(context, Routes.settings);
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'Show History',
+            onPressed: () {
+              final currency = BlocProvider.of<CurrencySettingBloc>(context).state.currency;
+              BlocProvider.of<HistoryBloc>(context).add(FetchHistory(baseCurrency: currency));
+              Navigator.pushNamed(context, Routes.charts);
+            },
+          ),
         ],
       ),
       body: Column(

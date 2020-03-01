@@ -44,13 +44,13 @@ class ExchangeAPIClient {
         "-" +
         today.month.toString() +
         "-" +
-        today.year.toString();
-    final fiveDaysAgo = today.subtract(Duration(days: 5));
+        today.day.toString();
+    final fiveDaysAgo = today.subtract(Duration(days: 6));
     final startDate = fiveDaysAgo.year.toString() +
         "-" +
         fiveDaysAgo.month.toString() +
         "-" +
-        fiveDaysAgo.year.toString();
+        fiveDaysAgo.day.toString();
 
     final historyQuoteURL =
         "$baseURL/history?start_at=$startDate&end_at=$endDate&base=$baseCurrency";
